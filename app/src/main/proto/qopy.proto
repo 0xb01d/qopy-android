@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package qopy;
+
+option java_package = "com.qopy.proto";
+option java_multiple_files = true;
+
+// === 1. Enums ===
+enum ContentType {
+  CONTENT_TYPE_UNSPECIFIED = 0;
+  TEXT = 1;
+  IMAGE = 2;
+}
+
+enum ErrorCode {
+  ERROR_UNSPECIFIED = 0;
+  ERROR_INVALID_VERSION = 1;
+  ERROR_PAYLOAD_TOO_LARGE = 2;
+  ERROR_DECRYPTION_FAILED = 3;
+  ERROR_PAIRING_REJECTED = 4;
+  ERROR_PAIRING_EXPIRED = 5;
+  ERROR_RATE_LIMITED = 6;
+  ERROR_UNAUTHORIZED = 7;
+  ERROR_INTERNAL = 8;
+}
+
+// === 2. Pairing State Machine ===
+message PairRequest {
+  string pairing_session_id = 1; // UUIDv4
+  string device_id = 2;          // UUIDv4
+  string device_name = 3;        // e.g. "ThinkPad Arch"
+  string os = 4;                 // "linux", "macos", "windows", "android"
+  bytes public_key = 5;          // X25519 public key (32 bytes)
+  bytes tls_cert_sha256 = 6;     // SHA-256 fingerprint of TLS certificate (32 bytes)
+  uint32 protocol_version = 7;   // Protocol version (1)
+}
+
+message PairChallenge {
+  string pairing_session_id = 1; // UUIDv4 matching PairRequest
+  string device_id = 2;          // UUIDv4 of responder
+  string device_name = 3;
+  string os = 4;
+  bytes public_key = 5;          // X25519 public key (32 bytes)
+  bytes tls_cert_sha256 = 6;     // SHA-256 fingerprint of responder TLS certificate (32 bytes)
+}
+
+message PairProof {
+  string pairing_session_id = 1;
+  bytes proof = 2;               // HMAC-SHA256(pairing_code, transcript_hash) (32 bytes)
+}
+
+message PairAck {
+  string pairing_session_id = 1;
+  bool accepted = 2;
+  string message = 3;
+}
+
+message PairCancel {
+  string pairing_session_id = 1;
+  string reason = 2;
+}
+
+// === 3. Clipboard Sync ===
+message ClipboardContent {
+  string event_id = 1;           // UUIDv4 event identifier
+  string source_device_id = 2;    // UUIDv4 device identifier
+  bytes encrypted_data = 3;      // NaCl Box encrypted payload (X25519 + XSalsa20-Poly1305, max 10MB)
+  bytes nonce = 4;               // 24-byte cryptographically random nonce
+  ContentType type = 5;          // TEXT or IMAGE
+  uint64 timestamp_ms = 6;       // Unix epoch in milliseconds for LWW conflict ordering
+  bytes content_hash = 7;        // SHA-256 hash (32 bytes) for loopback deduplication
+  bool sensitive = 8;            // True if sender flagged content as sensitive
+  uint32 image_width = 9;        // Image width in pixels (if type == IMAGE)
+  uint32 image_height = 10;      // Image height in pixels (if type == IMAGE)
+  string mime_type = 11;         // Canonical MIME type ("text/plain; charset=utf-8" or "image/png")
+}
+
+// === 4. Control & Management ===
+message Ping {
+  uint64 nonce = 1;
+  uint64 timestamp_ms = 2;
+}
+
+message Pong {
+  uint64 nonce = 1;
+  uint64 timestamp_ms = 2;
+}
+
+message DeviceStatus {
+  string device_id = 1;
+  string device_name = 2;
+  bool clipboard_available = 3;  // False when Android app is in background
+  bool auto_sync_enabled = 4;
+}
+
+message RenameRequest {
+  string new_device_name = 1;
+}
+
+message RenameAck {
+  bool success = 1;
+  string message = 2;
+}
+
+message UnpairRequest {
+  string reason = 1;
+}
+
+message ErrorMessage {
+  ErrorCode code = 1;
+  string description = 2;
+}
+
+// === 5. Master Wire Envelope ===
+message Envelope {
+  uint32 protocol_version = 1;   // Default = 1
+  string message_id = 2;         // UUIDv4
+  uint64 timestamp_ms = 3;       // Unix epoch in milliseconds
+
+  oneof payload {
+    // Pairing (10-19)
+    PairRequest pair_request = 10;
+    PairChallenge pair_challenge = 11;
+    PairProof pair_proof = 12;
+    PairAck pair_ack = 13;
+    PairCancel pair_cancel = 14;
+
+    // Clipboard (20-29)
+    ClipboardContent clipboard = 20;
+
+    // Health & Status (30-39)
+    Ping ping = 30;
+    Pong pong = 31;
+    DeviceStatus status = 32;
+
+    // Control (40-49)
+    RenameRequest rename_request = 40;
+    RenameAck rename_ack = 41;
+    UnpairRequest unpair_request = 42;
+
+    // Error (50)
+    ErrorMessage error = 50;
+  }
+}

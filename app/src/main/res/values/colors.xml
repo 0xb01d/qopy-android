@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#4F46E5</color>
+    <color name="primary_variant">#4338CA</color>
+    <color name="secondary">#06B6D4</color>
+    <color name="secondary_variant">#0891B2</color>
+    <color name="background">#F8FAFC</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_dark">#0F172A</color>
+    <color name="surface_variant_dark">#1E293B</color>
+    <color name="status_online">#22C55E</color>
+    <color name="status_paused">#F59E0B</color>
+    <color name="status_offline">#94A3B8</color>
+</resources>
