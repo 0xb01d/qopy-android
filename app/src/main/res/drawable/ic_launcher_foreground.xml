@@ -5,49 +5,19 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
     <group
-        android:scaleX="0.15"
-        android:scaleY="0.15"
-        android:translateX="15"
-        android:translateY="15">
-        <!-- Back Clipboard (Remote Node) -->
+        android:scaleX="0.14"
+        android:scaleY="0.14"
+        android:translateX="18.2"
+        android:translateY="18.2">
+        <!-- Q Ring -->
         <path
-            android:fillColor="#E61E293B"
-            android:strokeColor="#FF38BDF8"
-            android:strokeWidth="10"
-            android:pathData="M200,120 h160 a30,30 0 0 1 30,30 v220 a30,30 0 0 1 -30,30 h-160 a30,30 0 0 1 -30,-30 v-220 a30,30 0 0 1 30,-30 z" />
+            android:fillColor="#00000000"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="44"
+            android:pathData="M 236,124 A 112,112 0 1,1 235.9,124 Z" />
+        <!-- Lightning Tail -->
         <path
-            android:fillColor="#FF0EA5E9"
-            android:pathData="M240,105 h80 a10,10 0 0 1 10,10 v20 a10,10 0 0 1 -10,10 h-80 a10,10 0 0 1 -10,-10 v-20 a10,10 0 0 1 10,-10 z" />
-
-        <!-- Front Clipboard (Local Node) -->
-        <path
-            android:fillColor="#FFFFFFFF"
-            android:pathData="M130,160 h180 a30,30 0 0 1 30,30 v230 a30,30 0 0 1 -30,30 h-180 a30,30 0 0 1 -30,-30 v-230 a30,30 0 0 1 30,-30 z" />
-        <!-- Front Clip -->
-        <path
-            android:fillColor="#FF4F46E5"
-            android:pathData="M180,140 h80 a14,14 0 0 1 14,14 v20 a14,14 0 0 1 -14,14 h-80 a14,14 0 0 1 -14,-14 v-20 a14,14 0 0 1 14,-14 z" />
-        <!-- Clip dot -->
-        <path
-            android:fillColor="#FFFFFFFF"
-            android:pathData="M220,164 m-6,0 a6,6 0 1,1 12,0 a6,6 0 1,1 -12,0" />
-
-        <!-- Content Lines -->
-        <path
-            android:fillColor="#FFCBD5E1"
-            android:pathData="M160,230 h120 a6,6 0 0 1 6,6 v4 a6,6 0 0 1 -6,6 h-120 a6,6 0 0 1 -6,-6 v-4 a6,6 0 0 1 6,-6 z" />
-        <path
-            android:fillColor="#FF94A3B8"
-            android:pathData="M160,260 h80 a6,6 0 0 1 6,6 v4 a6,6 0 0 1 -6,6 h-80 a6,6 0 0 1 -6,-6 v-4 a6,6 0 0 1 6,-6 z" />
-
-        <!-- Sync Node / Q-Tail -->
-        <path
-            android:fillColor="#FF0F172A"
-            android:strokeColor="#FF06B6D4"
-            android:strokeWidth="8"
-            android:pathData="M330,320 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0" />
-        <path
-            android:fillColor="#FF38BDF8"
-            android:pathData="M325,302 l14,16 h-10 l8,18 l-16,-14 h10 z" />
+            android:fillColor="#FFFFFF"
+            android:pathData="M 264,256 L 348,256 L 314,334 L 396,334 L 290,442 L 316,362 L 246,362 Z" />
     </group>
 </vector>
